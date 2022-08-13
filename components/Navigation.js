@@ -4,7 +4,7 @@ import Logo from "../assets/logo.png";
 import LogoNext from "../assets/next.png"
 
 const Navigation = () => {
-  const menu = ["home", "peserta"];
+  const menu = ["home", "peserta", "data"];
 
   return (
     <Navbar fluid={true} rounded={true}>
