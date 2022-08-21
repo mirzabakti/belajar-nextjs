@@ -42,7 +42,20 @@ const DetailStatic = ({ data }) => {
           <p>Nilai: {data.score}</p>
         </li>
         <li>
-          <p>Indeks nilainya: {data.score >= 80 && data.score <= 100 ? "A" : data.score >= 70 && data.score < 80 ? "B" : data.score >= 60 && data.score < 60 ? "D" : data.score < 50 && data.score >= 0 ? E : "Nilai tidak valid"}</p>
+          <p>
+            Indeks nilainya:
+            {data.score >= 80 && data.score <= 100
+              ? "A"
+              : data.score >= 70 && data.score < 80
+              ? "B"
+              : data.score >= 60 && data.score < 70
+              ? "C"
+              : data.score >= 50 && data.score < 60
+              ? "D"
+              : data.score < 50 && data.score >= 0
+              ? "E"
+              : "Nilai tidak valid"}
+          </p>
         </li>
       </ul>
     </div>

@@ -16,7 +16,7 @@ const Static = ({ data }) => {
   console.log(data);
 
   return (
-    <div>
+    <>
       <Layout />
       {data.length !== 0 &&
         data.map((res, index) => {
@@ -32,7 +32,7 @@ const Static = ({ data }) => {
             </Link>
           );
         })}
-    </div>
+    </>
   );
 };
 
