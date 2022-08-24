@@ -1,5 +1,6 @@
 import Layout from "../../widget/Layout";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { GlobalContext } from "../../context/GlobalContext";
 import axios from "axios";
 
 export async function getServerSideProps() {
@@ -14,17 +15,13 @@ export async function getServerSideProps() {
 }
 
 export default function Server({ data }) {
+  // console.log(data)
+  const { state, handleFunction } = useContext(GlobalContext);
+  let { input, setInput, fetchStatus, setFetchStatus, currentId, setCurrentId } = state;
+  let { handleChange, handleSubmit, handleDelete, handleEdit } = handleFunction;
+
   //state data
   const [dataStudents, setDataStudents] = useState(data);
-  const [input, setInput] = useState({
-    name: "",
-    course: "",
-    score: "",
-  });
-
-  // indikator
-  const [fetchStatus, setFetchStatus] = useState(false);
-  const [currentId, setCurrentId] = useState(-1);
 
   let fetchData = async () => {
     let res = await axios.get("https://backendexample.sanbercloud.com/api/student-scores");
@@ -39,56 +36,6 @@ export default function Server({ data }) {
       setFetchStatus(false);
     }
   }, [fetchStatus, setFetchStatus]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    let { name, course, score } = input;
-
-    if (currentId === -1) {
-      axios.post(`https://backendexample.sanbercloud.com/api/student-scores`, { name, course, score }).then((res) => {
-        setFetchStatus(true);
-      });
-    } else {
-      axios.put(`https://backendexample.sanbercloud.com/api/student-scores/${currentId}`, { name, course, score }).then((res) => {
-        setFetchStatus(true);
-      });
-    }
-
-    setInput({
-      name: "",
-      course: "",
-      score: "",
-    });
-
-    setCurrentId(-1);
-  };
-
-  const handleDelete = (e) => {
-    let idData = e.target.value;
-
-    axios.delete(`https://backendexample.sanbercloud.com/api/student-scores/${idData}`).then((res) => {
-      console.log(res);
-      setFetchStatus(true);
-    });
-  };
-
-  const handleEdit = (e) => {
-    let idData = e.target.value;
-
-    axios.get(`https://backendexample.sanbercloud.com/api/student-scores/${idData}`).then((res) => {
-      console.log(res);
-      setCurrentId(res.data.id);
-
-      setInput({
-        name: res.data.name,
-        course: res.data.course,
-        score: res.data.score,
-      });
-    });
-  };
-
-  const handleChange = (e) => setInput({ ...input, [e.target.name]: e.target.value });
 
   return (
     <>
@@ -156,7 +103,7 @@ export default function Server({ data }) {
           </tbody>
         </table>
       </div>
-      <form onSubmit={handleSubmit} classNameName="w-1/2 mx-auto mt-5">
+      <form onSubmit={handleSubmit} className="w-1/2 mx-auto mt-5">
         <div className="mb-6">
           <label className="block mb-2 text-white text-sm font-medium text-gray-900 dark:text-gray-300">Name</label>
           <input
